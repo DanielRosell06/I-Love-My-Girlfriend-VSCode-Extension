@@ -36,6 +36,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = activate;
 exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
+const path = __importStar(require("path"));
+const fs = __importStar(require("fs"));
+const os = __importStar(require("os"));
+const child_process_1 = require("child_process");
 class SimpleWebviewViewProvider {
     constructor(_extensionUri) {
         this._extensionUri = _extensionUri;
@@ -45,6 +49,12 @@ class SimpleWebviewViewProvider {
             enableScripts: true,
         };
         webviewView.webview.html = this.getSimpleWebviewContent(webviewView.webview);
+        webviewView.webview.onDidReceiveMessage((message) => {
+            if (message.command === 'openFolder') {
+                const imagesPath = path.join(this._extensionUri.fsPath, 'images');
+                this.openFolder(imagesPath);
+            }
+        });
     }
     getSimpleWebviewContent(webview) {
         const imagePath = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'images', 'doom0.png'));
@@ -62,14 +72,43 @@ class SimpleWebviewViewProvider {
               max-width: 100%;
               height: auto;
             }
+            button {
+              margin-top: 20px;
+              padding: 10px 20px;
+              font-size: 16px;
+              cursor: pointer;
+            }
           </style>
         </head>
         <body>
           <h1>I Love My Girlfriend!</h1>
           <img src="${imagePath}" alt="My Girlfriend" />
+          <button id="openFolder">Open Images Folder</button>
+          <script>
+            const vscode = acquireVsCodeApi();
+            document.getElementById('openFolder').addEventListener('click', () => {
+              vscode.postMessage({ command: 'openFolder' });
+            });
+          </script>
         </body>
       </html>
     `;
+    }
+    openFolder(folderPath) {
+        if (!fs.existsSync(folderPath)) {
+            vscode.window.showErrorMessage(`Folder not found: ${folderPath}`);
+            return;
+        }
+        const platform = os.platform();
+        if (platform === 'win32') {
+            (0, child_process_1.exec)(`start "" "${folderPath}"`);
+        }
+        else if (platform === 'darwin') {
+            (0, child_process_1.exec)(`open "${folderPath}"`);
+        }
+        else {
+            (0, child_process_1.exec)(`xdg-open "${folderPath}"`);
+        }
     }
 }
 SimpleWebviewViewProvider.viewType = 'ilovemygirlfriend.openview';
