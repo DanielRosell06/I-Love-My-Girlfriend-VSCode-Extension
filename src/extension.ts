@@ -24,6 +24,10 @@ class SimpleWebviewViewProvider implements vscode.WebviewViewProvider {
       if (message.command === 'openFolder') {
         const imagesPath = path.join(this._extensionUri.fsPath, 'images');
         this.openFolder(imagesPath);
+      } else if (message.command === 'listFiles') {
+        const imagesPath = path.join(this._extensionUri.fsPath, 'images');
+        const fileUris = this.getFileUris(webviewView.webview, imagesPath);
+        webviewView.webview.postMessage({ command: 'displayImages', fileUris });
       }
     });
   }
@@ -44,6 +48,7 @@ class SimpleWebviewViewProvider implements vscode.WebviewViewProvider {
             img {
               max-width: 100%;
               height: auto;
+              margin: 10px;
             }
             button {
               margin-top: 20px;
@@ -51,16 +56,40 @@ class SimpleWebviewViewProvider implements vscode.WebviewViewProvider {
               font-size: 16px;
               cursor: pointer;
             }
+            .image-container {
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: center;
+              gap: 10px;
+            }
           </style>
         </head>
         <body>
           <h1>I Love My Girlfriend!</h1>
           <img src="${imagePath}" alt="My Girlfriend" />
           <button id="openFolder">Open Images Folder</button>
+          <button id="listFiles">Show Images</button>
+          <div class="image-container" id="imageContainer"></div>
           <script>
             const vscode = acquireVsCodeApi();
             document.getElementById('openFolder').addEventListener('click', () => {
               vscode.postMessage({ command: 'openFolder' });
+            });
+            document.getElementById('listFiles').addEventListener('click', () => {
+              vscode.postMessage({ command: 'listFiles' });
+            });
+            window.addEventListener('message', (event) => {
+              const message = event.data;
+              if (message.command === 'displayImages') {
+                const imageContainer = document.getElementById('imageContainer');
+                imageContainer.innerHTML = '';
+                message.fileUris.forEach((fileUri) => {
+                  const img = document.createElement('img');
+                  img.src = fileUri;
+                  img.alt = 'Image';
+                  imageContainer.appendChild(img);
+                });
+              }
             });
           </script>
         </body>
@@ -82,6 +111,25 @@ class SimpleWebviewViewProvider implements vscode.WebviewViewProvider {
       exec(`open "${folderPath}"`);
     } else {
       exec(`xdg-open "${folderPath}"`);
+    }
+  }
+
+  private getFileUris(webview: vscode.Webview, folderPath: string): string[] {
+    if (!fs.existsSync(folderPath)) {
+      vscode.window.showErrorMessage(`Folder not found: ${folderPath}`);
+      return [];
+    }
+
+    try {
+      const files = fs.readdirSync(folderPath);
+      return files.map((file) => {
+        const filePath = vscode.Uri.file(path.join(folderPath, file));
+        return webview.asWebviewUri(filePath).toString();
+      });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      vscode.window.showErrorMessage(`Error reading folder: ${errorMessage}`);
+      return [];
     }
   }
 }
