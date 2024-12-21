@@ -1,71 +1,47 @@
-# ilovemygirlfriend README
+# ilovemygirlfriend VSCode Extension
 
-This is the README for your extension "ilovemygirlfriend". After writing up a brief description, we recommend including the following sections.
+💕This extension is made for those who love their girlfriend💕
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+This Extension provides you a space on your VSCode screen just to display photos of your girlfriend. To use it, you just need to:
+- Install it and enable;
+- Will apear a heart symbol in your side bar, click it;
+- Click on the Open Images Folder button;
+- Put the images that you want to display in the folder ;
+- Click on the Refresh Images button;
+- Enjoy it 😁.
 
-For example if there is an image subfolder under your extension project workspace:
+### Now you can:
+- Display any images of your girlfriend while you code;
+- Change between 7 borders;
+- Show your girlfriend that you will never stop wanting to see her.
 
-\!\[feature X\]\(images/feature-x.png\)
+![Loading...](https://raw.githubusercontent.com/DanielRosell06/I-Love-My-Girlfriend-VSCode-Extension/main/assets/ILoveMyGirlfriendBanner.png)
+
+![Loading...](https://raw.githubusercontent.com/DanielRosell06/I-Love-My-Girlfriend-VSCode-Extension/main/assets/ILoveMyGirlfriendBanner01.png)
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+`VSCode 1.96.2`
 
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
+Working properly with all the features.
 
-### 1.0.1
+## Author
 
-Fixed issue #.
+Made by Daniel Aniceto Rosell
 
-### 1.1.0
+- [Github](https://github.com/DanielRosell06)
 
-Added features X, Y, and Z.
+- [Linkedin](https://www.linkedin.com/in/daniel-rosell-48bb48305/)
 
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+- [Instagram](https://www.instagram.com/daniel_rosell_06/)
 
 **Enjoy!**
