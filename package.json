@@ -2,8 +2,9 @@
   "name": "ilovemygirlfriend",
   "displayName": "I Love My girlfriend",
   "description": "For those who love their girlfriend",
-  "version": "1.0.1",
-  "publisher": "DanielRosell06",
+  "version": "1.0.2",
+  "icon": "assets/heart-icon.png",
+  "publisher": "DanielRosell",
   "engines": {
     "vscode": "^1.96.2"
   },
