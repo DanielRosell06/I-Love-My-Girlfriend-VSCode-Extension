@@ -50,24 +50,35 @@ class SimpleWebviewViewProvider {
         webviewView.webview.options = {
             enableScripts: true,
         };
-        // Caminho da pasta de imagens
+        // Obtem o nome dos arquivos na pasta de imagens
         const imagesPath = path.join(this._extensionUri.fsPath, 'images');
-        // Obtém os nomes dos arquivos na pasta de imagens
         const fileNames = this.getFileNames(imagesPath);
+        // Obtém os nomes dos arquivos na pasta de imagens
+        const bordersPath = path.join(this._extensionUri.fsPath, 'assets', 'borders');
+        const borderFileNames = this.getFileNames(bordersPath);
         // Configura o HTML da Webview com as imagens carregadas
-        webviewView.webview.html = this.getSimpleWebviewContent(webviewView.webview, fileNames);
+        webviewView.webview.html = this.getSimpleWebviewContent(webviewView.webview, fileNames, borderFileNames);
         // Listener para mensagens enviadas do HTML para o backend
         webviewView.webview.onDidReceiveMessage((message) => {
+            // Verifica se a mensagem é para abrir a pasta de imagens
             if (message.command === 'openFolder') {
                 this.openFolder(imagesPath);
+            }
+            //Verifica se a mensagem é para atualizar as imagens
+            if (message.command === 'refreshImages') {
+                const newFileNames = this.getFileNames(imagesPath);
+                webviewView.webview.html = this.getSimpleWebviewContent(webviewView.webview, newFileNames, borderFileNames);
             }
         });
     }
     // Gera o conteúdo HTML da Webview
-    getSimpleWebviewContent(webview, fileNames) {
-        // Caminho da imagem principal
-        const imagePath = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'images', 'doom0.png'));
-        const borderPath = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'assets', 'love-border.png'));
+    getSimpleWebviewContent(webview, fileNames, borderFileNames) {
+        // Caminho da imagem de borda
+        const borderPath = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'assets', 'borders', 'love-border-00.png'));
+        const bordersHtml = borderFileNames
+            .map((fileName) => `<img src="${webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'assets', 'borders', fileName))}" alt="border" class="image-border"/>`)
+            .join('');
+        //<img src="${borderPath}" alt="border" class="image-border"/>
         // Gera o HTML para exibir as imagens dinamicamente
         const imagesHtml = fileNames
             .map((fileName) => `<img src="${webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'images', fileName))}" alt="${fileName}" class="girlfriend-image"/>`)
@@ -88,11 +99,34 @@ class SimpleWebviewViewProvider {
               height: auto;
               margin: 10px 0;
             }
-            #openFolder {
+
+            #refreshImages {
+              width: 80%;
               padding: 10px 20px;
               font-size: 16px;
               cursor: pointer;
-              margin-top: 110vw;
+              margin-top: 10px;
+              margin-left: auto;
+              margin-right: auto;
+              background-color: rgb(255, 255, 255);
+              border-radius: 30px;
+              box-shadow: 0 5px 0 rgb(248, 196, 225);
+              border: none;
+              color: rgb(204, 8, 116);
+              transition: all 0.1s ease-in-out;
+            }
+            #refreshImages:active {
+              transform: translateY(5px);
+              background-color: rgb(248, 196, 225);
+              box-shadow: 0 0 0 rgb(228, 148, 192);
+            }
+
+              
+            #openFolder {
+              width: 80%;
+              padding: 10px 20px;
+              font-size: 16px;
+              cursor: pointer;
               margin-left: auto;
               margin-right: auto;
               background-color: rgb(255, 118, 193);
@@ -100,7 +134,15 @@ class SimpleWebviewViewProvider {
               box-shadow: 0 5px 0 rgb(209, 82, 152);
               border: none;
               color: white;
+              transition: all 0.1s ease-in-out;
+              margin-top: 10px;
             }
+            #openFolder:active {
+              transform: translateY(5px);
+              background-color: rgb(209, 82, 152);
+              box-shadow: 0 0 0 rgb(182, 53, 124);
+            }
+
             .image-container {
               display: flex;
               flex-wrap: wrap;
@@ -116,6 +158,9 @@ class SimpleWebviewViewProvider {
               display: none;
             }
 
+            
+
+            
             .active{
               display: block;
               position: absolute;
@@ -134,6 +179,11 @@ class SimpleWebviewViewProvider {
             }
 
             .image-border{
+              display: none;
+            }
+
+            .border-active{
+              display: block;
               position: absolute;
               top: 0;
               left: 0;
@@ -149,23 +199,121 @@ class SimpleWebviewViewProvider {
               margin-right: auto;
             }
 
-            .warning{
-              font-size: 12px;
-              color:rgb(255, 51, 163);}
+            .border-control-container{
+              display: flex;
+              justify-content: center;
+              width: 100%;
+              margin-top: 102vw;
+              height: 30px;
+            }
+
+            .border-control-content{
+              display: flex;
+              justify-content: space-between;
+              width: 80%;
+            }
+
+            .border-control-button{
+              border-radius: 100%;
+              width: 30px;
+              height: 30px;
+              color: white;
+              background-color: rgb(255, 118, 193);
+              border: none;
+              cursor: pointer;
+              font-size: 16px;
+              box-shadow: 0 5px 0 rgb(209, 82, 152);
+              transition: all 0.1s ease-in-out;
+            }
+            .border-control-button:active{
+              transform: translateY(5px);
+              background-color: rgb(209, 82, 152);
+              box-shadow: 0 0 0 rgb(182, 53, 124);
+            }
+
+            .slide-pointer{
+              width: 7px;
+              height: 7px;
+              border-radius: 100%;
+              background-color: rgb(230, 110, 176);
+              transition: all 0.1s ease-in-out;
+              margin-top: auto;
+              margin-bottom: auto;
+            }
+
+            .slide-pointer-active{
+              width: 10px;
+              height: 10px;
+              background-color: rgb(224, 60, 151);
+            }
+
+
+
           </style>
         </head>
         <body>
           <div class="image-container">
             <div clas="image-content">
-              <img src="${borderPath}" alt="border" class="image-border"/>
+              ${bordersHtml}
               ${imagesHtml}
             </div>
           </div>
+          <did class="border-control-container">
+            <did class="border-control-content">
+              <button id="borders-control-left" class="border-control-button"> < </button>
+              <div class="slide-pointer slide-pointer-active"></div>
+              <div class="slide-pointer"></div>
+              <div class="slide-pointer"></div>
+              <div class="slide-pointer"></div>
+              <div class="slide-pointer"></div>
+              <div class="slide-pointer"></div>
+              <div class="slide-pointer"></div>
+              <button id="borders-control-right" class="border-control-button"> > </button>
+            </did>
+          </did>
           <button id="openFolder">Open Images Folder</button>
-          <p class="warning">* You need to reestart VSCode to upload new photos!</p>
+          <button id="refreshImages">Refresh Images</button>
+
+
+
           <script>
 
+            //Função para alternar as bordas
+
+            const leftControler = document.getElementById('borders-control-left');
+            const rightControler = document.getElementById('borders-control-right');
+            const borders = document.querySelectorAll('.image-border');
+            const pointers = document.querySelectorAll('.slide-pointer');
+            borders[0].classList.add('border-active');
+            let indexBorder = 0;
+
+            
+            function changeBorder(index){
+              borders.forEach((border) => {
+                border.classList.remove('border-active');
+              });
+              pointers.forEach((pointer) => {
+                pointer.classList.remove('slide-pointer-active');
+              });
+              borders[index].classList.add('border-active');
+              pointers[index].classList.add('slide-pointer-active');
+            }
+
+
+            leftControler.addEventListener('click', () => {
+              indexBorder = (indexBorder - 1 + borders.length) % borders.length;
+              changeBorder(indexBorder);
+            });
+
+            rightControler.addEventListener('click', () => {
+              indexBorder = (indexBorder + 1) % borders.length;
+              changeBorder(indexBorder);
+            });
+            
+
+
             // Função para alternar as imagens
+
             const images = document.querySelectorAll('.girlfriend-image');
             images[0].classList.add('active');
             let index = 0;
@@ -178,11 +326,18 @@ class SimpleWebviewViewProvider {
             }, 3000);
 
 
+
             // Configuração para comunicação com a extensão
+            
             const vscode = acquireVsCodeApi();
             document.getElementById('openFolder').addEventListener('click', () => {
               vscode.postMessage({ command: 'openFolder' });
             });
+
+            document.getElementById('refreshImages').addEventListener('click', () => {
+              vscode.postMessage({ command: 'refreshImages' });
+            });
+
           </script>
         </body>
       </html>
