@@ -67,9 +67,10 @@ class SimpleWebviewViewProvider {
     getSimpleWebviewContent(webview, fileNames) {
         // Caminho da imagem principal
         const imagePath = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'images', 'doom0.png'));
+        const borderPath = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'assets', 'love-border.png'));
         // Gera o HTML para exibir as imagens dinamicamente
         const imagesHtml = fileNames
-            .map((fileName) => `<img src="${webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'images', fileName))}" alt="${fileName}" class="girlfriend-image active"/>`)
+            .map((fileName) => `<img src="${webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'images', fileName))}" alt="${fileName}" class="girlfriend-image"/>`)
             .join('');
         // Retorna o HTML completo
         return `
@@ -87,11 +88,18 @@ class SimpleWebviewViewProvider {
               height: auto;
               margin: 10px 0;
             }
-            button {
-              margin-top: 20px;
+            #openFolder {
               padding: 10px 20px;
               font-size: 16px;
               cursor: pointer;
+              margin-top: 110vw;
+              margin-left: auto;
+              margin-right: auto;
+              background-color: rgb(255, 118, 193);
+              border-radius: 30px;
+              box-shadow: 0 5px 0 rgb(209, 82, 152);
+              border: none;
+              color: white;
             }
             .image-container {
               display: flex;
@@ -100,28 +108,61 @@ class SimpleWebviewViewProvider {
               gap: 10px;
             }
 
+            .image-content {
+              position: relative;
+            }
+
             .girlfriend-image {
               display: none;
             }
 
             .active{
               display: block;
-              width: 200px;
-              height: 200px;
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              width: 87vw;
+              height: 87vw;
+              object-fit: cover;
+              border: none;
+              margin-top: 10.46vw;
+              margin-left: auto;
+              margin-right: auto;
+              z-index: -1000;
+            }
+
+            .image-border{
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              width: 100vw;
+              height: 100vw;
               object-fit: cover;
               border-radius: 10px;
               border: none;
+              z-index: 1000;
+              margin-left: auto;
+              margin-right: auto;
             }
 
+            .warning{
+              font-size: 12px;
+              color:rgb(255, 51, 163);}
           </style>
         </head>
         <body>
           <div class="image-container">
             <div clas="image-content">
+              <img src="${borderPath}" alt="border" class="image-border"/>
               ${imagesHtml}
             </div>
           </div>
           <button id="openFolder">Open Images Folder</button>
+          <p class="warning">* You need to reestart VSCode to upload new photos!</p>
           <script>
 
             // Função para alternar as imagens
