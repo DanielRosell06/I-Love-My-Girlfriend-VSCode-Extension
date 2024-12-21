@@ -23,6 +23,8 @@ This extension provides a space on your VSCode screen to display photos of your 
 ![Loading...](https://raw.githubusercontent.com/DanielRosell06/I-Love-My-Girlfriend-VSCode-Extension/main/assets/ILoveMyGirlfriendBanner01.png)
 
 
+>If the images folder is empty, the button can not open it. So do NOT close it when it is empty. In case you did it, is recomended for you to reinstall the extension, it is the fastest solution
+
 
 ## Requirements
 
@@ -32,7 +34,8 @@ Requires `VSCode 1.96.2` or higher.
 
 ### 1.0.0
 
-Initial release with all features working properly.
+Initial release with all features working.
+Just one issue that if the images folder is empty, the button can not open it.
 
 ## Author
 
