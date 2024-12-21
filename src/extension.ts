@@ -140,13 +140,6 @@ class SimpleWebviewViewProvider implements vscode.WebviewViewProvider {
             }
 
             .girlfriend-image {
-              display: none;
-            }
-
-            
-
-            
-            .active{
               display: block;
               position: absolute;
               top: 0;
@@ -161,6 +154,11 @@ class SimpleWebviewViewProvider implements vscode.WebviewViewProvider {
               margin-left: auto;
               margin-right: auto;
               z-index: -1000;
+              opacity: 0;
+              transition: all 0.5s ease-in-out;
+            }           
+            .active{
+              opacity: 1;
             }
 
             .image-border{
