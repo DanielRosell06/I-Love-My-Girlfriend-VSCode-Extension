@@ -2,7 +2,7 @@
   "name": "ilovemygirlfriend",
   "displayName": "I Love My girlfriend",
   "description": "For those who love their girlfriend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "DanielRosell06",
   "engines": {
     "vscode": "^1.96.2"
@@ -10,9 +10,7 @@
   "categories": [
     "Visualization"
   ],
-  "activationEvents": [
-    
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
