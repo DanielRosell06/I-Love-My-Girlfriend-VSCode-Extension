@@ -182,12 +182,71 @@ class SimpleWebviewViewProvider implements vscode.WebviewViewProvider {
               margin-right: auto;
             }
 
+            .checkbox-container{
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin-top: 102vw;
+            }
+
+            .change-images-button{
+              display: none; 
+            }
+
+            .change-images-button-active {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 100%;
+              width: 30px;
+              height: 30px;
+              color: white;
+              background-color: rgb(255, 118, 193);
+              border: none;
+              cursor: pointer;
+              font-size: 16px;
+              box-shadow: 0 5px 0 rgb(209, 82, 152);
+              transition: all 0.1s ease-in-out;
+              margin-left: 10px;
+            }
+
+            .change-images-button-active:active {
+              transform: translateY(5px);
+              background-color: rgb(209, 82, 152);
+              box-shadow: 0 0 0 rgb(182, 53, 124);
+            }
+
+            #checkbox {
+              appearance: none;
+              width: 20px;
+              height: 20px;
+              border: 2px solid #ccc;
+              border-radius: 4px;
+              background-color: #fff;
+              cursor: pointer;
+              transition: background-color 0.3s, border-color 0.3s;
+            }
+
+            #checkbox:checked {
+              background-color: #ff76c1; /* Cor do fundo quando ativado */
+              border-color: #d15298; /* Cor da borda quando ativado */
+            }
+            #checkbox:checked::before {
+              content: '✔'; /* Caractere ou ícone de marcação */
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white; /* Cor da marca */
+              font-size: 14px;
+            }
+
             .border-control-container{
               display: flex;
               justify-content: center;
               width: 100%;
-              margin-top: 102vw;
+              margin-top: 10px;
               height: 30px;
+              margin-bottom: 30px;
             }
 
             .border-control-content{
@@ -241,6 +300,18 @@ class SimpleWebviewViewProvider implements vscode.WebviewViewProvider {
               ${imagesHtml}
             </div>
           </div>
+
+          <div class="checkbox-container">
+            <input type="checkbox" id="checkbox">
+            <h3>Static image<h3>
+            <div class="checkbox-buttons-container"></div>
+              <button id="change-images-left" class="change-images-button"><</button>
+              <button id="change-images-right" class="change-images-button">></button>
+            </div>
+          </div>
+          
+          <h3>Change the border</h3>
+
           <did class="border-control-container">
             <did class="border-control-content">
               <button id="borders-control-left" class="border-control-button"> < </button>
@@ -300,13 +371,54 @@ class SimpleWebviewViewProvider implements vscode.WebviewViewProvider {
             const images = document.querySelectorAll('.girlfriend-image');
             images[0].classList.add('active');
             let index = 0;
-            setInterval(() => {
-              images.forEach((image) => {
-                image.classList.remove('active');
-              });
-              images[index].classList.add('active');
-              index = (index + 1) % images.length;
-            }, 3000);
+            function iniciarSlide(){
+                changeINterval = setInterval(() => {
+                images.forEach((image) => {
+                    image.classList.remove('active');
+                });
+                images[index].classList.add('active');
+                index = (index + 1) % images.length;
+                }, 6000);
+            }
+            iniciarSlide();
+
+
+
+            // Programando a checkbox
+
+            checkbox = document.getElementById('checkbox');
+            changeImagesButton = document.querySelectorAll('.change-images-button');
+            checkbox.addEventListener('change', () => {
+              if(checkbox.checked){
+                clearInterval(changeINterval);
+                changeImagesButton.forEach((button) => {
+                  button.classList.add('change-images-button-active');
+                });
+              }
+              else{
+                iniciarSlide();
+                changeImagesButton.forEach((button) => {
+                  button.classList.remove('change-images-button-active');
+                });
+              }
+            });
+
+
+            // Programando os botões de troca de imagens
+
+            const changeImagesLeft = document.getElementById('change-images-left');
+            const changeImagesRight = document.getElementById('change-images-right');
+            let buttonIndex = 0;
+            changeImagesLeft.addEventListener('click', () => {
+              images[buttonIndex].classList.remove('active');
+              buttonIndex = (buttonIndex - 1 + images.length) % images.length;
+              images[buttonIndex].classList.add('active');
+            });
+            changeImagesRight.addEventListener('click', () => {
+              images[buttonIndex].classList.remove('active');
+              buttonIndex = (buttonIndex + 1) % images.length;
+              images[buttonIndex].classList.add('active');
+            });
 
 
 

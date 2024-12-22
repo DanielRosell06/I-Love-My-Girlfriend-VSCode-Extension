@@ -9,21 +9,22 @@ This extension provides a space on your VSCode screen to display photos of your 
 - Install and enable the extension.  
 - A heart symbol will appear in your sidebar—click it.  
 - Click the "Open Images Folder" button.  
-- Add the images you want to display in the folder.  
+- Add the images you’d like to display to the folder.  
 - Click the "Refresh Images" button.  
 - Enjoy it 😁.
 
 ### With this extension, you can:
-- Display any image of your girlfriend while you code.  
+- Display any image of your girlfriend while you code.
+- Switch between static image or slideshow.
 - Switch between 7 different border styles.  
-- Show your girlfriend that you'll never stop wanting to see her.
+- Show your girlfriend how much she means to you.
 
 ![Loading...](https://raw.githubusercontent.com/DanielRosell06/I-Love-My-Girlfriend-VSCode-Extension/main/assets/ILoveMyGirlfriendBanner.png)
 
 ![Loading...](https://raw.githubusercontent.com/DanielRosell06/I-Love-My-Girlfriend-VSCode-Extension/main/assets/ILoveMyGirlfriendBanner01.png)
 
 
->If the images folder is empty, the button can not open it. So do NOT close it when it is empty. In case you did it, is recomended for you to reinstall the extension, it is the fastest solution
+>If the images folder is empty, the button won’t work. Please avoid closing it while it’s empty. If this happens, it’s recommended to reinstall the extension as it’s the quickest solution..
 
 
 ## Requirements
@@ -32,10 +33,17 @@ Requires `VSCode 1.96.2` or higher.
 
 ## Release Notes
 
-### 1.0.0
+### <u>1.0.0</u>
 
 Initial release with all features working.
+
 Just one issue that if the images folder is empty, the button can not open it.
+
+### <u>1.1.0</u>
+
+Added a checkbox to switch between a static image and a slideshow.
+
+No problems solved
 
 ## Author
 
